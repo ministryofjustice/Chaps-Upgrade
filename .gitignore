@@ -1,0 +1,16 @@
+# Ignore build output
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.vspscc
+*.vssscc
+
+# Ignore Rider and Visual Studio Code settings
+.idea/
+.vscode/
+
+# Ignore packages
+*.nupkg
+packages/
