@@ -1,0 +1,6 @@
+[submodule "Chaps-Upgrade/CHAPS"]
+	path = Chaps-Upgrade/CHAPS
+	url = https://github.com/ministryofjustice/CHAPS.git
+[submodule "Chaps-Upgrade/ChapsDotNet"]
+	path = Chaps-Upgrade/ChapsDotNet
+	url = https://github.com/ministryofjustice/ChapsDotNet.git
