@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET", "..\..\ChapsDotNet\ChapsDotNET\ChapsDotNET.csproj", "{B4016A88-5125-4D69-A2E8-2836FA754F31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET", "ChapsDotNet\ChapsDotNET\ChapsDotNET.csproj", "{B4016A88-5125-4D69-A2E8-2836FA754F31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Business", "..\..\ChapsDotNet\ChapsDotNET.Business\ChapsDotNET.Business.csproj", "{BD4F338A-F30E-444A-B949-66E24A650BE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Business", "ChapsDotNet\ChapsDotNET.Business\ChapsDotNET.Business.csproj", "{BD4F338A-F30E-444A-B949-66E24A650BE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Data", "..\..\ChapsDotNet\ChapsDotNET.Data\ChapsDotNET.Data.csproj", "{EE95C740-5FEF-4B08-93B9-061484165132}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Data", "ChapsDotNet\ChapsDotNET.Data\ChapsDotNET.Data.csproj", "{EE95C740-5FEF-4B08-93B9-061484165132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Business.Tests", "..\..\ChapsDotNet\ChapsDotNET.Business.Tests\ChapsDotNET.Business.Tests.csproj", "{E8F11484-B469-497D-8264-3E1E250E0F98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Business.Tests", "ChapsDotNet\ChapsDotNET.Business.Tests\ChapsDotNET.Business.Tests.csproj", "{E8F11484-B469-497D-8264-3E1E250E0F98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Tests", "..\..\ChapsDotNet\ChapsDotNET.Tests\ChapsDotNET.Tests.csproj", "{4F212B3E-AE56-4D2E-BC40-9E2F49E4052E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChapsDotNET.Tests", "ChapsDotNet\ChapsDotNET.Tests\ChapsDotNET.Tests.csproj", "{4F212B3E-AE56-4D2E-BC40-9E2F49E4052E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaps", "..\..\CHAPS\CHAPS\Chaps\Chaps.csproj", "{D7E14F0D-BDF4-49A2-8CD3-EE6F23866486}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaps", "CHAPS\Chaps\Chaps.csproj", "{D7E14F0D-BDF4-49A2-8CD3-EE6F23866486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
