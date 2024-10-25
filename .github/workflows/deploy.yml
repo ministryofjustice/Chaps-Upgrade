@@ -1,0 +1,44 @@
+name: YARP build and deploy pipeline
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            audience: sts.amazonaws.com
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
+          ECR_REPOSITORY: "chaps-upgrade-ecr-repo"
+        run: |
+          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
+          docker build -t ${{ vars.ECR_URL }}:${{ github.sha }} -f ./Dockerfile .
+          docker tag ${{ vars.ECR_URL }}:${{ github.sha }} ${{ vars.ECR_URL }}:development
+          docker push ${{ vars.ECR_URL }}:${{ github.sha }}
+          docker push ${{ vars.ECR_URL }}:development
+
+  
