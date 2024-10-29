@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.SSH_PRIVATE_KEY }}
+          token: ${{ secrets.CHAPS_TOKEN }}
           fetch-depth: 0
 
       - name: Verify Directory Contents
@@ -36,7 +36,7 @@ jobs:
 
       - name: Modify .gitmodules to Use GITHUB_TOKEN
         run: |
-          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:${{ secrets.CHAPS_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Print .gitmodules File
         run: cat .gitmodules
