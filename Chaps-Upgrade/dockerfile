@@ -2,12 +2,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
 WORKDIR /src
 
+# Copy and restore ChapsDotNet dependencies
+COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
+RUN dotnet restore ChapsDotNet/ChapsDotNET.csproj
+
 # Verify submodules were copied correctly
 RUN powershell -Command Get-ChildItem Chaps-Upgrade/ChapsDotNet/ChapsDotNET/
-
-# Copy and restore ChapsDotNet dependencies
-COPY Chaps-Upgrade/ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
-RUN dotnet restore ChapsDotNet/ChapsDotNET.csproj
 
 # Build ChapsDotNet
 COPY ChapsDotNet/. ./ChapsDotNet/
