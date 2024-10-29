@@ -32,7 +32,7 @@ COPY CHAPS/. ./
 RUN nuget restore CHAPS.sln
 
 # Build CHAPS
-RUN msbuild /p:Configuration=Release /p:PlatformTarget=AnyCPU
+RUN msbuild /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:OutputPath=bin/Release
 
 # Verify the directory structure after building CHAPS
 RUN dir /app/Chaps
