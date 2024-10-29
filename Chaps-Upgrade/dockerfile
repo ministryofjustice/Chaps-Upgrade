@@ -5,6 +5,11 @@ WORKDIR /src
 # Copy and restore ChapsDotNet dependencies
 COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
 RUN dir "ChapsDotNet\\ChapsDotNET\\"
+# Confirm the file path before attempting restore
+RUN powershell -Command "Test-Path ChapsDotNet\\ChapsDotNET\\ChapsDotNET.csproj"
+
+WORKDIR /src/ChapsDotNet/ChapsDotNET
+RUN dotnet restore ChapsDotNET.csproj
 RUN dotnet restore ChapsDotNet/ChapsDotNET.csproj
 
 # Build ChapsDotNet
