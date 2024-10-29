@@ -15,6 +15,10 @@ RUN dotnet publish ChapsDotNET.csproj -c Release -o /out
 FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS build-chaps
 WORKDIR /app
 
+# Copy CHAPS project and restore dependencies
+COPY CHAPS/Chaps/Chaps.csproj CHAPS/
+RUN nuget restore CHAPS/Chaps.csproj
+
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/. ./
 RUN nuget restore CHAPS.sln
@@ -22,7 +26,7 @@ RUN nuget restore CHAPS.sln
 # Build CHAPS
 RUN msbuild /p:Configuration=Release /p:PlatformTarget=AnyCPU
 
-# Stage 3: Run
+# Stage 3: Combine & Run
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
 
