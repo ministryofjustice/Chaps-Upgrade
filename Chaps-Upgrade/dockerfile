@@ -4,7 +4,7 @@ WORKDIR /src
 
 # Copy and restore ChapsDotNet dependencies
 COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
-RUN dir ChapsDotNet/ChapsDotNET/
+RUN dir ChapsDotNet\ChapsDotNET\
 RUN dotnet restore ChapsDotNet/ChapsDotNET.csproj
 
 # Build ChapsDotNet
