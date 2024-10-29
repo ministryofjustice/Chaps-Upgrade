@@ -23,7 +23,7 @@ RUN nuget restore CHAPS.sln
 RUN msbuild /p:Configuration=Release /p:PlatformTarget=AnyCPU
 
 # Stage 3: Run
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-ltsc2019 AS runtime
 WORKDIR /app
 
 # Copy from build-dotnet
