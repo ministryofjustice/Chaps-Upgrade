@@ -15,9 +15,8 @@ COPY ChapsDotNet/ChapsDotNET.Business/ ./ChapsDotNet/ChapsDotNET.Business/
 WORKDIR /src/ChapsDotNet/ChapsDotNET
 RUN dotnet restore ChapsDotNET.csproj
 
-# Build ChapsDotNet
-COPY ChapsDotNet/. ./ChapsDotNet/
-WORKDIR /src/ChapsDotNet
+WORKDIR /src/ChapsDotNet/ChapsDotNET
+# Publish
 RUN dotnet publish ChapsDotNET.csproj -c Release -o /out
 
 # Stage 2: Build CHAPS (.NET Framework 4.8)
