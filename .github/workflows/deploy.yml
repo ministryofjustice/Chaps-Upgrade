@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Display git submodule info
         run: |
-          cat .gitmodules
+          cat ./.gitmodules
           git submodule status
       - name: Checkout with submodules using SSH
         uses: actions/checkout@v4
