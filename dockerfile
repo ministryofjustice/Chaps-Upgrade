@@ -1,5 +1,5 @@
 # Stage 1: Build ChapsDotNet (.NET 8)
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
 WORKDIR /src
 
 # Copy and restore ChapsDotNet dependencies
@@ -23,7 +23,7 @@ RUN nuget restore CHAPS.sln
 RUN msbuild /p:Configuration=Release /p:PlatformTarget=AnyCPU
 
 # Stage 3: Run
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-ltsc2019 AS runtime
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
 
 # Copy from build-dotnet
