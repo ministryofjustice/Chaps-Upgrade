@@ -20,16 +20,26 @@ jobs:
       contents: read
 
     steps:
-      - name: Display git submodule info
-        run: |
-          cat ./.gitmodules
-          git submodule status
       - name: Checkout with submodules using SSH
         uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.SSH_PRIVATE_KEY }}
           fetch-depth: 0
+
+      - name: Verify Directory Contents
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          dir
+
+      - name: Modify .gitmodules to Use GITHUB_TOKEN
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Print .gitmodules File
+        run: cat .gitmodules
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
