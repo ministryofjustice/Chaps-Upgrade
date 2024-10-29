@@ -18,8 +18,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      packages: read
-      pull-requests: write
 
     steps:
       - name: Checkout
@@ -27,6 +25,10 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          persist-credentials: false
+          extra-header: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
