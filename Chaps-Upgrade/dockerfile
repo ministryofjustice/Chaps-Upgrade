@@ -2,6 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
 WORKDIR /src
 
+# test that submodule can be accessed: 
+RUN ls -la ChapsDotnet/ChapsDotNET/
+
 # Copy and restore ChapsDotNet dependencies
 COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/
 RUN dotnet restore ChapsDotNet/ChapsDotNET.csproj
