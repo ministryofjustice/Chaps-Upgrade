@@ -37,7 +37,7 @@ jobs:
       - name: Verify submodule checkout
         run: |
           dir Chaps-Upgrade\ChapsDotNet\ChapsDotNET\
-          shell: cmd
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
