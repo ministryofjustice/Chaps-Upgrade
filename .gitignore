@@ -7,9 +7,10 @@ obj/
 *.vspscc
 *.vssscc
 
-# Ignore Rider and Visual Studio Code settings
+# Ignore Rider,VS Code and VS settings
 .idea/
 .vscode/
+.vs/
 
 # Ignore packages
 *.nupkg
