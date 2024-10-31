@@ -45,13 +45,22 @@ jobs:
             aws-region: eu-west-2
             role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push ChapsDotNet image to Amazon ECR
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
-          ECR_REPOSITORY: "chaps-upgrade-ecr-repo"
+          ECR_REPOSITORY: "chapsdotnet-ecr-repo"
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
-          docker build -t ${{ vars.ECR_URL }}:${{ github.sha }} -f ./Chaps-Upgrade/Dockerfile ./Chaps-Upgrade
+          docker build -t ${{ vars.ECR_URL }}:${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
           docker tag ${{ vars.ECR_URL }}:${{ github.sha }} ${{ vars.ECR_URL }}:development
           docker push ${{ vars.ECR_URL }}:${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:development
+      
+      - name: Build and tag and push CHAPS image to Amazon ECR
+        env:
+          ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
+          ECR_REPOSITORY: "chaps-ecr-repo"
+        run: |
+          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
+          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
