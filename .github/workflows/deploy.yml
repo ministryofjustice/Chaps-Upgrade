@@ -66,3 +66,53 @@ jobs:
           docker tag ${{ vars.ECR_URL }}:${{ github.sha }} ${{ vars.ECR_URL }}:development
           docker push ${{ vars.ECR_URL }}:${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:development 
+          
+  deploy-dev:
+      needs: [build]
+      runs-on: ubuntu-latest
+
+      permissions:
+        id-token: write
+        contents: read
+
+      steps:
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            audience: sts.amazonaws.com
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
+
+        - name: Update ECS Task Definition for ChapsDotNet
+          id: update-chapsdotnet-task-def
+          env:
+            AWS_REGION: eu-west-2
+            ECR_REPOSITORY: "chapsdotnet-ecr-repo"
+          run: |
+            aws ecs describe-task-definition --task-definition chapsdotnet-family --query taskDefinition > chapsdotnet-task-definition.json
+            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:${{ github.sha }}"' chapsdotnet-task-definition.json > updated-chapsdotnet-task-definition.json
+
+        - name: Deploy ChapsDotNet Amazon ECS task definition
+          uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+          with:
+            task-definition: updated-chapsdotnet-task-definition.json
+            service: chapsdotnet-service
+            cluster: chaps-upgrade-cluster
+            wait-for-service-stability: true
+
+        - name: Update ECS Task Definition for CHAPS
+          id: update-chaps-task-def
+          env:
+            AWS_REGION: eu-west-2
+            ECR_REPOSITORY: "chaps-ecr-repo"
+          run: |
+            aws ecs describe-task-definition --task-definition chaps-family --query taskDefinition > chaps-task-definition.json
+            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:${{ github.sha }}"' chaps-task-definition.json > updated-chaps-task-definition.json
+
+        - name: Deploy CHAPS Amazon ECS task definition
+          uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+          with:
+            task-definition: updated-chaps-task-definition.json
+            service: chaps-service
+            cluster: chaps-upgrade-cluster
+            wait-for-service-stability: true
