@@ -62,5 +62,7 @@ jobs:
           ECR_REPOSITORY: "chaps-ecr-repo"
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
-          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
-          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          docker build -t ${{ vars.ECR_URL }}:${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
+          docker tag ${{ vars.ECR_URL }}:${{ github.sha }} ${{ vars.ECR_URL }}:development
+          docker push ${{ vars.ECR_URL }}:${{ github.sha }}
+          docker push ${{ vars.ECR_URL }}:development 
