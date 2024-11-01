@@ -82,6 +82,13 @@ jobs:
             audience: sts.amazonaws.com
             aws-region: eu-west-2
             role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
+        
+        - name: Debug ECR URL, SHA and Task definition
+          run: |
+            echo "ECR URL: ${{ vars.ECR_URL }}"
+            echo "SHA: ${{ github.sha }}"
+            aws ecs describe-task-definition --task-definition chapsdotnet-family
+
 
         - name: Update ECS Task Definition for ChapsDotNet
           id: update-chapsdotnet-task-def
