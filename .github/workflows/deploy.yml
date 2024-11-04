@@ -81,7 +81,7 @@ jobs:
           with:
             audience: sts.amazonaws.com
             aws-region: eu-west-2
-            role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
+            role-to-assume: arn:aws:iam::513884314856:role/modernisation-platform-oidc-cicd
         
         # - name: Get Terraform Output for chapsdotnet task definition
         #   id: tf-output
