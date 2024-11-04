@@ -121,7 +121,7 @@ jobs:
           with:
             task-definition: updated-chapsdotnet-task-definition.json
             service: chapsdotnet-service
-            cluster: chaps-upgrade-cluster
+            cluster: cdpt-chaps-ecs-cluster
             wait-for-service-stability: true
 
         - name: Update ECS Task Definition for CHAPS
@@ -138,5 +138,5 @@ jobs:
           with:
             task-definition: updated-chaps-task-definition.json
             service: chaps-service
-            cluster: chaps-upgrade-cluster
+            cluster: cdpt-chaps-ecs-cluster
             wait-for-service-stability: true
