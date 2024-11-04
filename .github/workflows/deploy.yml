@@ -93,10 +93,17 @@ jobs:
         #     echo "SHA: ${{ github.sha }}"
         #     aws ecs describe-task-definition --task-definition "${{ env.chapsdotnet_task_definition }}"
         
-        - name: List All Task Definitions (Debug)
+        - name: List All Cluster services
           shell: bash
           run: |
-            aws ecs list-task-definitions --cluster "cdpt-chaps-ecs-cluster" --region eu-west-2
+            aws ecs list-services --cluster "cdpt-chaps-ecs-cluster" --region eu-west-2 --query "serviceArns[]" --output text > services.txt
+        
+        - name: Describe Each Service and Retrieve Task Definitions
+          shell: bash
+          run: |
+            while read -r service_arn; do
+              aws ecs describe-services --cluster "cdpt-chaps-ecs-cluster" --services "$service_arn" --region eu-west-2 --query "services[*].taskDefinition" --output text
+            done < services.txt
 
         - name: Update ECS Task Definition for ChapsDotNet
           id: update-chapsdotnet-task-def
