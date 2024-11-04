@@ -83,7 +83,7 @@ jobs:
             aws-region: eu-west-2
             role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
         
-        # - name: Get Terraform Output
+        # - name: Get Terraform Output for chapsdotnet task definition
         #   id: tf-output
         #   run: echo "chapsdotnet_task_definition=$(terraform output -raw chapsdotnet_task_definition)" >> $GITHUB_ENV
       
@@ -94,7 +94,7 @@ jobs:
         #     aws ecs describe-task-definition --task-definition "${{ env.chapsdotnet_task_definition }}"
         
         - name: List All Task Definitions (Debug)
-          run: aws ecs list-task-definitions --region eu-west-2
+          run: aws ecs list-task-definitions --cluster cdpt-chaps-ecs-cluster --region eu-west-2
 
         - name: Update ECS Task Definition for ChapsDotNet
           id: update-chapsdotnet-task-def
