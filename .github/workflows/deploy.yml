@@ -85,16 +85,14 @@ jobs:
         
         - name: Get Terraform Output
           id: tf-output
-          run: echo "chapsdotnet_task_definition_arn=$(terraform output -raw chapsdotnet_task_definition_arn)" >> $GITHUB_ENV
+          run: echo "chapsdotnet_task_definition=$(terraform output -raw chapsdotnet_task_definition)" >> $GITHUB_ENV
       
         - name: Debug ECR URL, SHA and Task definition
           run: |
             echo "ECR URL: ${{ vars.ECR_URL }}"
             echo "SHA: ${{ github.sha }}"
-            aws ecs describe-task-definition --task-definition "${{ env.chapsdotnet_task_definition_arn }}"
+            aws ecs describe-task-definition --task-definition "${{ env.chapsdotnet_task_definition }}"
           
-
-
         - name: Update ECS Task Definition for ChapsDotNet
           id: update-chapsdotnet-task-def
           env:
