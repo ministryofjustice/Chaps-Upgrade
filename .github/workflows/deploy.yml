@@ -100,7 +100,7 @@ jobs:
             ECR_REPOSITORY: "chapsdotnet-ecr-repo"
           run: |
             aws ecs describe-task-definition --task-definition chapsdotnet-family --query taskDefinition > chapsdotnet-task-definition.json
-            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:chapsdotnet-development${{ github.sha }}"' chapsdotnet-task-definition.json > updated-chapsdotnet-task-definition.json
+            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}"' chapsdotnet-task-definition.json > updated-chapsdotnet-task-definition.json
 
         - name: Deploy ChapsDotNet Amazon ECS task definition
           uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -117,7 +117,7 @@ jobs:
             ECR_REPOSITORY: "chaps-ecr-repo"
           run: |
             aws ecs describe-task-definition --task-definition chaps-family --query taskDefinition > chaps-task-definition.json
-            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:chaps-development${{ github.sha }}"' chaps-task-definition.json > updated-chaps-task-definition.json
+            jq '.containerDefinitions[0].image = "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"' chaps-task-definition.json > updated-chaps-task-definition.json
 
         - name: Deploy CHAPS Amazon ECS task definition
           uses: aws-actions/amazon-ecs-deploy-task-definition@v1
