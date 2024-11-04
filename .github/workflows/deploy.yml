@@ -96,7 +96,7 @@ jobs:
         - name: List All Cluster services
           shell: bash
           run: |
-            aws ecs list-services --cluster "cdpt-chaps-ecs-cluster" --region eu-west-2 --query "serviceArns[]" --output text > services.txt
+            aws ecs list-services --cluster "cdpt-chaps-ecs-cluster" --region eu-west-2 --query "serviceArns[]" --output text | tr '\t' '/n' > services.txt
             cat services.txt
         
         - name: Describe Each Service and Retrieve Task Definitions
