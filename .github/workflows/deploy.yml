@@ -97,11 +97,13 @@ jobs:
           shell: bash
           run: |
             aws ecs list-services --cluster "cdpt-chaps-ecs-cluster" --region eu-west-2 --query "serviceArns[]" --output text > services.txt
+            cat services.txt
         
         - name: Describe Each Service and Retrieve Task Definitions
           shell: bash
           run: |
             while read -r service_arn; do
+              echo "Service: $service_arn"
               aws ecs describe-services --cluster "cdpt-chaps-ecs-cluster" --services "$service_arn" --region eu-west-2 --query "services[*].taskDefinition" --output text
             done < services.txt
 
