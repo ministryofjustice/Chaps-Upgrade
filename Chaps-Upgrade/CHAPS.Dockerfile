@@ -16,4 +16,9 @@ WORKDIR /app
 # Copy from build-chaps
 COPY --from=build-chaps /app/Chaps/bin/Release ./CHAPS
 
+# Expose both HTTP (80) and HTTPS (443) ports
+EXPOSE 80
+EXPOSE 443
+
+# set rntrypoint to start IIS
 ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"]
