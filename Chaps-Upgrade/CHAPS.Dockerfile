@@ -20,14 +20,5 @@ COPY --from=build-chaps /app/Chaps/bin/Release ./CHAPS
 EXPOSE 80
 EXPOSE 443
 
-# HTTPS config in IIS
-RUN powershell -NoProfile -Command \
-    Import-Module IISAdministration; \
-    New-WebBinding -Name "Default Web Site" -Protocol https -Port 443 -IPAddress *; \
-    
-    New-SelfSignedCertificate -CertStoreLocation cert:\LocalMachine\My -DnsName "localhost"; \
-    $thumbprint = (Get-ChildItem -Path cert:\LocalMachine\My | Select-Object -First 1 -ExpandProperty Thumbprint); \
-    New-Item -Path IIS:\SslBindings\0.0.0.0!443 -Value $thumbprint
-
 # set rntrypoint to start IIS
 ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"]
