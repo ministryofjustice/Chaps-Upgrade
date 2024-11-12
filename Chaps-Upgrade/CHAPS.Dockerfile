@@ -36,5 +36,6 @@ COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
 # Enable logging
 WORKDIR /
 COPY --from=build-chaps /app/bootstrap.ps1 ./
+RUN powershell -Command "Set-WebConfigurationProperty -filter 'system.webserver/directoryBrowse' -name enabled -value true"
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
 
