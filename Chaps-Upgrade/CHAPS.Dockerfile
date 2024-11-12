@@ -11,9 +11,9 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:DeployOnBuild=True \
     /p:DeployDefaultTarget=WebPublish \
+    /p:publishUrl=bin\Release\
     /p:WebPublishMethod=FileSystem \
     /p:DeleteExistingFiles=True \
-    /p:publishUrl=c:\bin\
     /p:DeployOnBuild=True \
     /p:PlatformTarget=AnyCPU
 
