@@ -35,6 +35,6 @@ COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
 
 # Enable logging
 WORKDIR /
-COPY --from=build-chaps ./bootstrap.ps1 ./
+COPY --from=build-chaps /app/bootstrap.ps1 ./
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
 
