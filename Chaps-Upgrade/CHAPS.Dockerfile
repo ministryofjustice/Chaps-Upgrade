@@ -37,3 +37,4 @@ COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
 WORKDIR /
 COPY --from=build ./bootstrap.ps1 ./
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
+
