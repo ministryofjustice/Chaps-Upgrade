@@ -55,7 +55,7 @@ jobs:
           docker push ${{ vars.ECR_URL }}:chaps-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chaps-development
       
-          - name: Build, tag, and push chapsdotnet image to Amazon ECR
+      - name: Build, tag, and push chapsdotnet image to Amazon ECR
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
