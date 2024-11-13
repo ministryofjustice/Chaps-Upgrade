@@ -47,10 +47,10 @@ jobs:
       - name: Build, tag, and push Combined image to Amazon ECR
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
-          ECR_REPOSITORY: "chaps-ecr-repo"
+          ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
-          docker build -t ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
+          docker build -t ${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
           docker tag ${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }} ${{ vars.ECR_URL }}:chaps-yarp-combined-development
           docker push ${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chaps-yarp-combined-development
@@ -85,4 +85,3 @@ jobs:
           service: chaps-yarp-combined-service
           cluster: cdpt-chaps-ecs-cluster
           wait-for-service-stability: true
-          
