@@ -51,7 +51,7 @@ jobs:
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
           docker build -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
-          docker tag ${{ vars.ECR_URL }}:chaps-${{ github.sha }} ${{ vars.ECR_URL }}:chaps--development
+          docker tag ${{ vars.ECR_URL }}:chaps-${{ github.sha }} ${{ vars.ECR_URL }}:chaps-development
           docker push ${{ vars.ECR_URL }}:chaps-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chaps-development
       
