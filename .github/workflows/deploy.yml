@@ -88,11 +88,16 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
 
-          jq '.containerDefinitions[] |
-              select(.name=="chapsdotnet-container").image = "{{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}" |
-              .containerDefinitions[] |
-              select(.name=="chaps-container").image = "{{ vars.ECR_URL }}:chaps-development"' \
-              chaps-yarp-task-definition.json > updated-chaps-yarp-task-definition.json
+          # Update the chapsdotnet-container image
+          jq '.containerDefinitions[] | 
+              select(.name == "chapsdotnet-container").image = "'${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}'"' \
+              chaps-yarp-task-definition.json > temp.json && mv temp.json chaps-yarp-task-definition.json
+
+          # Update the chaps-container image
+          jq '.containerDefinitions[] | 
+              select(.name == "chaps-container").image = "'${{ vars.ECR_URL }}:chaps-development'"' \
+              chaps-yarp-task-definition.json > temp.json && mv temp.json chaps-yarp-task-definition.json
+
 
       - name: Deploy Chaps YARP Combined Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
