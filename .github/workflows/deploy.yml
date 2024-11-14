@@ -67,7 +67,7 @@ jobs:
   #         docker push ${{ vars.ECR_URL }}:chapsdotnet-development
                
   deploy-dev:
-    needs: [build]
+  #  needs: [build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
