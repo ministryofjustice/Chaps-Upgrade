@@ -87,7 +87,8 @@ jobs:
           ECR_REPOSITORY: "chaps-ecr-repo"
         run: |
           aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
-          
+          cat chaps-yarp-task-definition.json
+
           jq '.taskDefinition.containerDefinitions[] | 
           select(.name=="chapsdotnet-container").image = "{{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}" |
           .taskDefinition.containerDefinitions[] | 
