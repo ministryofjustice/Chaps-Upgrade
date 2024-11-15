@@ -84,7 +84,7 @@ jobs:
                   process.exit(1);
                 }
       
-                const taskDefinition = data.services[0]?.taskDefinition;
+                const taskDefinition = data.services[0]?.taskDefinition || 'No active task definition';
                 console.log('Active Task Definition ARN:', taskDefinition);
               }
             );
