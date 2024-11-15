@@ -79,7 +79,13 @@ jobs:
           audience: sts.amazonaws.com
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::513884314856:role/modernisation-platform-oidc-cicd
-      
+
+      - name: Fetch Current ECS Task Definition
+        run: |
+          aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
+          echo "Fetched current task definition:"
+          cat chaps-yarp-task-definition.json
+          
       - name: Output task definition for validation
         run: |
           echo "Contents of updated task definition: "
