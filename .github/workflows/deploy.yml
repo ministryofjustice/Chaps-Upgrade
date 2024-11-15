@@ -35,33 +35,33 @@ jobs:
         run: |
           npm install aws-sdk
       
-          - name: Validate Active Task Definition
-          run: |
-            echo "Validating the active task definition for ECS service..."
-            node -e "
-              const AWS = require('aws-sdk');
-              const ecs = new AWS.ECS({ region: 'eu-west-2' });
-      
-              ecs.describeServices(
-                {
-                  cluster: 'cdpt-chaps-ecs-cluster',
-                  services: ['chaps-yarp-combined-service']
-                },
-                (err, data) => {
-                  if (err) {
-                    console.error('Error fetching ECS service details:', err);
-                    process.exit(1);
-                  }
-      
-                  const taskDefinition = data.services[0]?.taskDefinition;
-                  console.log('Active Task Definition ARN:', taskDefinition);
+      - name: Validate Active Task Definition
+        run: |
+          echo "Validating the active task definition for ECS service..."
+          node -e "
+            const AWS = require('aws-sdk');
+            const ecs = new AWS.ECS({ region: 'eu-west-2' });
+    
+            ecs.describeServices(
+              {
+                cluster: 'cdpt-chaps-ecs-cluster',
+                services: ['chaps-yarp-combined-service']
+              },
+              (err, data) => {
+                if (err) {
+                  console.error('Error fetching ECS service details:', err);
+                  process.exit(1);
                 }
-              );
-            "
-          env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+    
+                const taskDefinition = data.services[0]?.taskDefinition;
+                console.log('Active Task Definition ARN:', taskDefinition);
+              }
+            );
+          "
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         
 
       - name: Modify .gitmodules to Use GITHUB_TOKEN
