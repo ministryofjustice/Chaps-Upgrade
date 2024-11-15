@@ -85,13 +85,8 @@ jobs:
           aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
           echo "Fetched current task definition:"
           cat chaps-yarp-task-definition.json
-          
-      - name: Output task definition for validation
-        run: |
-          echo "Contents of updated task definition: "
-          cat updated-chaps-yarp-task-definition.json
-          echo "Container details: "
-          jq '.containerDefinitions[] | {name, image}' updated-chaps-yarp-task-definition.json
+
+
 
       - name: Update ECS Task Definition for chaps YARP combined
         id: update-chaps-yarp-task-definition
@@ -106,6 +101,13 @@ jobs:
           jq '(.containerDefinitions[] | select(.name == "chapsdotnet-container").image) = "${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}" |
               (.containerDefinitions[] | select(.name == "chaps-container").image) = "${{ vars.ECR_URL }}:chaps-development"' \
               chaps-yarp-task-definition.json > updated-chaps-yarp-task-definition.json
+      
+      - name: Output task definition for validation
+        run: |
+          echo "Contents of updated task definition: "
+          cat updated-chaps-yarp-task-definition.json
+          echo "Container details: "
+          jq '.containerDefinitions[] | {name, image}' updated-chaps-yarp-task-definition.json
 
       - name: Deploy Chaps YARP Combined Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
