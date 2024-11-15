@@ -26,6 +26,15 @@ jobs:
           token: ${{ secrets.CHAPS_TOKEN }}
           fetch-depth: 0
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install aws-sdk
+        run: |
+          npm install aws-sdk
+      
       - name: Modify .gitmodules to Use GITHUB_TOKEN
         run: |
           git config --global url."https://x-access-token:${{ secrets.CHAPS_TOKEN }}@github.com/".insteadOf "https://github.com/"
@@ -44,6 +53,42 @@ jobs:
             aws-region: eu-west-2
             role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
 
+      - name: Export AWS environment variables for Node.js
+        run: |
+          $env:AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          $env:AWS_SECRET_ACCESS_KEY = "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          $env:AWS_SESSION_TOKEN = "${{ secrets.AWS_SESSION_TOKEN }}"
+        shell: pwsh
+
+      - name: Validate Active Task Definition
+        run: |
+          echo "Validating the active task definition for ECS service..."
+          node -e "
+            const AWS = require('aws-sdk');
+            AWS.config.update({
+              region: 'eu-west-2',
+              accessKeyId: '${{ secrets.AWS_ACCESS_KEY_ID }}',
+              secretAccessKey: '${{ secrets.AWS_SECRET_ACCESS_KEY }}',
+              sessionToken: '${{ secrets.AWS_SESSION_TOKEN }}'
+            });
+            const ecs = new AWS.ECS();
+      
+            ecs.describeServices(
+              {
+                cluster: 'cdpt-chaps-ecs-cluster',
+                services: ['chaps-yarp-combined-service']
+              },
+              (err, data) => {
+                if (err) {
+                  console.error('Error fetching ECS service details:', err);
+                  process.exit(1);
+                }
+      
+                const taskDefinition = data.services[0]?.taskDefinition || 'No active task definition';
+                console.log('Active Task Definition ARN:', taskDefinition);
+              }
+            );
+          "
       - name: Build, tag, and push chaps image to Amazon ECR
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
@@ -79,19 +124,41 @@ jobs:
           audience: sts.amazonaws.com
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::513884314856:role/modernisation-platform-oidc-cicd
-               
+
+      - name: Fetch Current ECS Task Definition
+        run: |
+          aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
+          echo "Fetched current task definition:"
+          cat chaps-yarp-task-definition.json
+
       - name: Update ECS Task Definition for chaps YARP combined
-        id: update-chaps-yarp-task-def
+        id: update-chaps-yarp-task-definition
         env:
           AWS_REGION: eu-west-2
           ECR_REPOSITORY: "chaps-ecr-repo"
         run: |
           aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
+          echo "Current task definition retrieved from ECS: "
           cat chaps-yarp-task-definition.json
               
-          jq '(.containerDefinitions[] | select(.name == "chapsdotnet-container").image) = "${{ vars.ECR_URL }}:chaps-yarp-combined-${{ github.sha }}" |
-              (.containerDefinitions[] | select(.name == "chaps-container").image) = "${{ vars.ECR_URL }}:chaps-development"' \
+          jq '(.containerDefinitions[] | select(.name == "chapsdotnet-container").image) = "${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}" |
+              (.containerDefinitions[] | select(.name == "chaps-container").image) = "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"' \
               chaps-yarp-task-definition.json > updated-chaps-yarp-task-definition.json
+      
+
+      
+      - name: Verify Active Task Definition
+        run: |
+          echo "Fetching active task definition ARN for service:"
+          active_task_definition=$(aws ecs describe-services --cluster cdpt-chaps-ecs-cluster --services chaps-yarp-combined-service --query "services[0].taskDefinition" --output text)
+          echo "Active Task Definition ARN: $active_task_definition"
+
+      
+      - name: Inspect Active Task Definition
+        run: |
+          echo "Inspecting container definitions for active task definition:"
+          active_task_definition=$(aws ecs describe-services --cluster cdpt-chaps-ecs-cluster --services chaps-yarp-combined-service --query "services[0].taskDefinition" --output text)
+          aws ecs describe-task-definition --task-definition $active_task_definition --query "taskDefinition.containerDefinitions[*].[name, image]" --output json
 
       - name: Deploy Chaps YARP Combined Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -100,3 +167,6 @@ jobs:
           service: chaps-yarp-combined-service
           cluster: cdpt-chaps-ecs-cluster
           wait-for-service-stability: true
+          force-new-deployment: true
+      
+      
