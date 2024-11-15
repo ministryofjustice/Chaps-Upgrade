@@ -52,12 +52,13 @@ jobs:
             audience: sts.amazonaws.com
             aws-region: eu-west-2
             role-to-assume: arn:aws:iam::631213771998:role/modernisation-platform-oidc-cicd
-            
+
       - name: Export AWS environment variables for Node.js
         run: |
-          export AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
-          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          export AWS_SESSION_TOKEN="${{ secrets.AWS_SESSION_TOKEN }}"
+          $env:AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          $env:AWS_SECRET_ACCESS_KEY = "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          $env:AWS_SESSION_TOKEN = "${{ secrets.AWS_SESSION_TOKEN }}"
+        shell: pwsh
 
       - name: Validate Active Task Definition
         run: |
