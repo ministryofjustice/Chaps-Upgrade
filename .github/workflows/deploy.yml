@@ -99,6 +99,9 @@ jobs:
           docker tag ${{ vars.ECR_URL }}:chaps-${{ github.sha }} ${{ vars.ECR_URL }}:chaps-development
           docker push ${{ vars.ECR_URL }}:chaps-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chaps-development
+          echo "Pushed images:"
+          echo "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"
+          echo "${{ vars.ECR_URL }}:chaps-development"
       
       - name: Build, tag, and push chapsdotnet image to Amazon ECR
         env:
@@ -110,7 +113,10 @@ jobs:
           docker tag ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} ${{ vars.ECR_URL }}:chapsdotnet-development
           docker push ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chapsdotnet-development
-               
+          echo "Pushed images:"
+          echo "${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}"
+          echo "${{ vars.ECR_URL }}:chapsdotnet-development"
+                    
   deploy-dev:
     needs: [build]
     runs-on: ubuntu-latest
