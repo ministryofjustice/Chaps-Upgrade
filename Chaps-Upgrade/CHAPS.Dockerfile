@@ -21,6 +21,9 @@ RUN msbuild Chaps.sln -verbosity:n /m \
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
 
+# Copy custom config file 
+COPY applicationHost.config C:/Windows/System32/inetsrv/config/applicationHost.config
+
 # configure IIS to write a global log file:
 RUN Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log' -n 'centralLogFileMode' -v 'CentralW3C'; \
     Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'truncateSize' -v 4294967295; \
@@ -37,5 +40,8 @@ COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
 WORKDIR /
 COPY --from=build-chaps /app/bootstrap.ps1 ./
 RUN powershell -Command "Set-WebConfigurationProperty -filter 'system.webserver/directoryBrowse' -name enabled -value true"
-ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
 
+# Reset IIS
+RUN iisreset
+
+ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
