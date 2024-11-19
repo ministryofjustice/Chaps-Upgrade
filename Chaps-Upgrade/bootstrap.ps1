@@ -30,7 +30,9 @@ if (-not $logDirectory) {
   $logDirectory = "C:\inetpub\logs\logfiles"
 }
 
-Write-Host "Log directory detected: $logDirectory"
+# Force resolution of %SystemDrive% to avoid invalid paths
+$resolvedLogDirectory = $env:SystemDrive + "\inetpub\logs\LogFiles"
+Write-Host "Log directory detected: $resolvedLogDirectory"
 
 # Dynamically determine site ID (assumes 'Default Web Site')
 Write-Host "Determining the site ID for 'Default Web Site'..."
