@@ -24,11 +24,14 @@ Invoke-WebRequest http://localhost -UseBasicParsing | Out-Null
 
 # Automatically detect IIS log file path
 Write-Host "Detecting IIS log directory..."
-$logDirectory = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/siteDefaults/logFile" -Name "directory"
-$logDirectory = if ($logDirectory) { $logDirectory } else { "C:\inetpub\logs\logfiles" }
+$logDirectory = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/siteDefaults/logFile" -Name "directory").Value
+if (-not $logDirectory) {
+  $logDirectory = "C:\inetpub\logs\logfiles"
+}
 
-# Determine site ID (assumes single site)
-$siteID = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='Default Web Site']" -Name "id"
+
+# Determine site ID (assumes 'Default Web Site')
+$siteID = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='Default Web Site']" -Name "id").Value
 $logPath = Join-Path -Path $logDirectory -ChildPath "W3SVC$siteID\u_extend1.log"
 
 Write-Host "Log file path: $logPath"
@@ -45,5 +48,6 @@ if (Test-Path -Path $logPath) {
     Write-Host "Log file found. Streaming contents to stdout:"
     Get-Content -Path $logPath -Tail 1 -Wait
 } else {
-    Write-Host "Log file still not found after retries. Ensure IIS is properly configured and traffic is reaching the site."
+    Write-Host "Log file still not found after retries. Exiting gracefully."
+    Exit 0
 }
