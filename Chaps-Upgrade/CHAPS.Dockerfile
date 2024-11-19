@@ -28,7 +28,7 @@ COPY applicationHost.config C:/Windows/System32/inetsrv/config/applicationHost.c
 RUN Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log' -n 'centralLogFileMode' -v 'CentralW3C'; \
     Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'truncateSize' -v 4294967295; \
     Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'period' -v 'MaxSize'; \
-    Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'directory' -v 'c:\inetpub\logs\logfiles'
+    Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'directory' -v 'c:\\inetpub\\logs\\logfiles'
 
 # Copy from build-chaps
 
@@ -42,6 +42,8 @@ COPY --from=build-chaps /app/bootstrap.ps1 ./
 RUN powershell -Command "Set-WebConfigurationProperty -filter 'system.webserver/directoryBrowse' -name enabled -value true"
 
 # Reset IIS
-RUN iisreset
+RUN powershell -Command \
+  Stop-Service W3SVC; \
+  Start-Service W3SVC
 
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
