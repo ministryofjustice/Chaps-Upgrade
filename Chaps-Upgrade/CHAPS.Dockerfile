@@ -1,5 +1,3 @@
-OLD DOCKERFILE
-
 # Stage 1: Build CHAPS (.NET Framework 4.8)
 FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS build-chaps
 WORKDIR /app
