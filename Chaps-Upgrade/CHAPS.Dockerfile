@@ -23,8 +23,6 @@ WORKDIR /app
 
 # configure IIS to write a global log file:
 RUN powershell -Command \
-    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/sites/siteDefaults/logFile' -name 'enabled' -value 'true'; \
-    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.webServer/directoryBrowse' -name 'enabled' -value 'True'; \
 	Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log' -name 'centralLogFileMode' -value 'CentralW3C'; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'period' -value 'MaxSize'; \
@@ -33,11 +31,10 @@ RUN powershell -Command \
 # Copy from build-chaps
 
 WORKDIR /inetpub/wwwroot
-COPY --from=build-chaps /app/Chaps/bin/Release ./CHAPS
-COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
+COPY --from=build-chaps /app/Chaps/bin/Release ./
+COPY --from=build-chaps /app/Chaps/Web.Release.config ./Web.config
 
 # Enable logging
 WORKDIR /
 COPY --from=build-chaps /app/bootstrap.ps1 ./
-RUN powershell -Command "Set-WebConfigurationProperty -filter 'system.webserver/directoryBrowse' -name enabled -value true"
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
