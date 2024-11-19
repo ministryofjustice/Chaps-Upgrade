@@ -21,17 +21,24 @@ RUN msbuild Chaps.sln -verbosity:n /m \
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
 
-# Copy custom config file 
-COPY applicationHost.config C:/Windows/System32/inetsrv/config/applicationHost.config
-
+# Install IIS
+RUN powershell -Command \
+    Install-WindowsFeature -Name Web-Server,Web-Http-Logging,Web-Dir-Browsing -IncludeManagementTools 
+    
 # configure IIS to write a global log file:
-RUN Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log' -n 'centralLogFileMode' -v 'CentralW3C'; \
-    Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'truncateSize' -v 4294967295; \
-    Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'period' -v 'MaxSize'; \
-    Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log/centralW3CLogFile' -n 'directory' -v 'c:\\inetpub\\logs\\logfiles'
+RUN Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log' -name 'centralLogFileMode' -value 'CentralW3C'; \
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'period' -value 'MaxSize'; \
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\\inetpub\\logs\\logfiles'
+
+# Enable directory browsing
+RUN powershell -Command \
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.webServer/directoryBrowse' -name 'enabled' -value 'True'
+
+# Reset IIS
+RUN powershell -Command Start-Service W3SVC
 
 # Copy from build-chaps
-
 WORKDIR /inetpub/wwwroot
 COPY --from=build-chaps /app/Chaps/bin/Release ./CHAPS
 COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
@@ -40,10 +47,5 @@ COPY --from=build-chaps /app/Chaps/Web.Release.config ./CHAPS/Web.config
 WORKDIR /
 COPY --from=build-chaps /app/bootstrap.ps1 ./
 RUN powershell -Command "Set-WebConfigurationProperty -filter 'system.webserver/directoryBrowse' -name enabled -value true"
-
-# Reset IIS
-RUN powershell -Command \
-  Stop-Service W3SVC; \
-  Start-Service W3SVC
 
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
