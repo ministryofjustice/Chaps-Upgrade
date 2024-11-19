@@ -22,7 +22,7 @@ Start-Service W3SVC
 Write-Host "Sending request to localhost to generate IIS logs..."
 Invoke-WebRequest http://localhost -UseBasicParsing | Out-Null
 
-# Automatically detect IIS log file path
+# Detect IIS log file path
 Write-Host "Detecting IIS log directory..."
 $logDirectory = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/siteDefaults/logFile" -Name "directory").Value
 if (-not $logDirectory) {
@@ -35,9 +35,13 @@ Write-Host "Log directory detected: $logDirectory"
 # Dynamically determine site ID (assumes 'Default Web Site')
 Write-Host "Determining the site ID for 'Default Web Site'..."
 $siteID = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='Default Web Site']" -Name "id").Value
+
+# Debug: output site ID
 if (-not $siteID) {
     Write-Host "Error: Could not determine site ID for 'Default Web Site'. Exiting."
     Exit 1
+} else {
+  Write-Host "Site ID detected: $siteID"
 }
 
 # Build the log file path
