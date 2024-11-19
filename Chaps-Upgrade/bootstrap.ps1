@@ -11,11 +11,11 @@ foreach($key in [System.Environment]::GetEnvironmentVariables('Process').Keys) {
 }
 
 # restart IIS
-Write_Host "Restarting IIS..."
+Write-Host "Restarting IIS..."
 iisreset
 
 # Start W3SVC service
-Write_Host "Starting W3SVC service"
+Write-Host "Starting W3SVC service"
 Start-Service W3SVC
 
 # Send a request to localhost to trigger logging
@@ -26,14 +26,22 @@ Invoke-WebRequest http://localhost -UseBasicParsing | Out-Null
 Write-Host "Detecting IIS log directory..."
 $logDirectory = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/siteDefaults/logFile" -Name "directory").Value
 if (-not $logDirectory) {
+  Write-Host "Defaulting to standard IIS log directory..."
   $logDirectory = "C:\inetpub\logs\logfiles"
 }
 
+Write-Host "Log directory detected: $logDirectory"
 
-# Determine site ID (assumes 'Default Web Site')
+# Dynamically determine site ID (assumes 'Default Web Site')
+Write-Host "Determining the site ID for 'Default Web Site'..."
 $siteID = (Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='Default Web Site']" -Name "id").Value
-$logPath = Join-Path -Path $logDirectory -ChildPath "W3SVC$siteID\u_extend1.log"
+if (-not $siteID) {
+    Write-Host "Error: Could not determine site ID for 'Default Web Site'. Exiting."
+    Exit 1
+}
 
+# Build the log file path
+$logFilePath = Join-Path -Path $logDirectory -ChildPath "W3SVC$siteID\u_extend1.log"
 Write-Host "Log file path: $logPath"
 
 # Wait for the log file to be created, with retries
@@ -44,6 +52,7 @@ while (!(Test-Path -Path $logPath) -and ($retries -gt 0)) {
     $retries--
 }
 
+# Stream log file contents or exit gracefully if not found
 if (Test-Path -Path $logPath) {
     Write-Host "Log file found. Streaming contents to stdout:"
     Get-Content -Path $logPath -Tail 1 -Wait
