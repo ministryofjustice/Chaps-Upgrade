@@ -6,13 +6,15 @@ WORKDIR /app
 COPY CHAPS/Chaps. ./CHAPS
 WORKDIR /app/CHAPS
 
-
 COPY CHAPS/Chaps.sln .
-COPY CHAPS/*.ps1 ./
+COPY ../Chaps.sln
+COPY ../*.ps1 ./scripts
 
 RUN dir /app/CHAPS
 RUN dir /app/CHAPS/Controllers
 RUN dir /app/CHAPS/Views
+RUN dir /app/CHAPS/scripts
+
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 RUN msbuild ./CHAPS/Chaps.sln -verbosity:n /m \
