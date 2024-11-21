@@ -5,6 +5,9 @@ WORKDIR /app
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/. ./
 COPY *.sln *.ps1 ./
+RUN dir /app/packages
+RUN dir /app/CHAPS
+RUN dir /app/CHAPS/Controllers
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 RUN msbuild Chaps.sln -verbosity:n /m \
