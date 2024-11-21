@@ -93,6 +93,7 @@ jobs:
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
+          DOCKER_BUILDKIT: 1
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
           docker build --no-cache --progress=plain -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
