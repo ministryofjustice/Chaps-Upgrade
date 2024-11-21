@@ -7,17 +7,18 @@ COPY CHAPS/Chaps. ./CHAPS
 WORKDIR /app/CHAPS
 
 #COPY CHAPS/Chaps.sln .
-COPY CHAPS/Chaps.sln ./Chaps.sln
+COPY CHAPS/Chaps.sln ./
 
 WORKDIR /app
 COPY *.ps1 ./
 
+WORKDIR /app/CHAPS
 RUN dir /app/CHAPS
 RUN dir /app/CHAPS/Controllers
 RUN dir /app/CHAPS/Views
 
 RUN nuget restore -Verbosity quiet Chaps.sln
-RUN msbuild ./CHAPS/Chaps.sln -verbosity:n /m \
+RUN msbuild Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:DeployOnBuild=True \
     /p:DeployDefaultTarget=WebPublish \
