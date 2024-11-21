@@ -1,6 +1,9 @@
 [submodule "Chaps-Upgrade/CHAPS"]
 	path = Chaps-Upgrade/CHAPS
 	url = git@github.com:ministryofjustice/CHAPS.git
+	branch = defaultDocument
+	
+	
 [submodule "Chaps-Upgrade/ChapsDotNet"]
 	path = Chaps-Upgrade/ChapsDotNet
 	url = git@github.com:ministryofjustice/ChapsDotNet.git
