@@ -8,6 +8,8 @@ WORKDIR /app/CHAPS
 
 #COPY CHAPS/Chaps.sln .
 COPY CHAPS/Chaps.sln ./Chaps.sln
+
+WORKDIR /app
 COPY *.ps1 ./
 
 RUN dir /app/CHAPS
