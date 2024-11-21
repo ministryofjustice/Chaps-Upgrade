@@ -6,7 +6,7 @@ WORKDIR /app
 COPY CHAPS/ ./CHAPS
 COPY *.ps1 ./
 
-RUN dir /app/CHAPS
+RUN dir 
 
 WORKDIR /app/CHAPS
 
@@ -24,8 +24,8 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:DeployOnBuild=True \
     /p:PlatformTarget=AnyCPU
 
-RUN dir /app/Chaps/bin
-RUN dir /app/Chaps/bin/Release
+RUN dir /app/CHAPS/Chaps/bin
+RUN dir /app/CHAPS/Chaps/bin/Release
 
 # Stage 3: Combine & Run
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
@@ -39,10 +39,9 @@ RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\\inetpub\\logs\\logfiles'
 
 # Copy from build-chaps
-
 WORKDIR /inetpub/wwwroot
-COPY --from=build-chaps /app/Chaps/bin/Release ./
-COPY --from=build-chaps /app/Chaps/Web.Release.config ./Web.config
+COPY --from=build-chaps /app/CHAPS/Chaps/bin/Release ./Release
+COPY --from=build-chaps /app/CHAPS/Chaps/Web.Release.config ./Web.config
 
 # Enable logging
 WORKDIR /
