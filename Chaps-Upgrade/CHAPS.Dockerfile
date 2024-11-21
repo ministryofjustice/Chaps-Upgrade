@@ -24,6 +24,9 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:DeployOnBuild=True \
     /p:PlatformTarget=AnyCPU
 
+RUN dir /app/Chaps/bin
+RUN dir /app/Chaps/bin/Release
+
 # Stage 3: Combine & Run
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
