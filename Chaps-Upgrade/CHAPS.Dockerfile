@@ -5,7 +5,10 @@ WORKDIR /app
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/Chaps. ./CHAPS
 WORKDIR /app/CHAPS
-COPY *.sln *.ps1 ./
+
+
+COPY CHAPS/Chaps.sln .
+COPY CHAPS/*.ps1 ./
 
 RUN dir /app/CHAPS
 RUN dir /app/CHAPS/Controllers
