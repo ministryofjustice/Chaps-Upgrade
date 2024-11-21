@@ -1,5 +1,0 @@
-[submodule "CHAPS"]
-	path = Chaps-Upgrade/CHAPS
-	branch = defaultDocument
-	url = https://github.com/ministryofjustice/CHAPS
-	
