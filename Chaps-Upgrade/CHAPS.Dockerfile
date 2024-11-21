@@ -7,14 +7,12 @@ COPY CHAPS/Chaps. ./CHAPS
 WORKDIR /app/CHAPS
 
 #COPY CHAPS/Chaps.sln .
-COPY ../Chaps.sln .
-COPY ../*.ps1 ./scripts
+COPY CHAPS/Chaps.sln ./Chaps.sln
+COPY *.ps1 ./
 
 RUN dir /app/CHAPS
 RUN dir /app/CHAPS/Controllers
 RUN dir /app/CHAPS/Views
-RUN dir /app/CHAPS/scripts
-
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 RUN msbuild ./CHAPS/Chaps.sln -verbosity:n /m \
