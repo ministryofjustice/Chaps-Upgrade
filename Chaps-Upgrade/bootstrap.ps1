@@ -31,11 +31,12 @@ Start-Service W3SVC
 # Test application readiness
 Write-Host "Sending request to localhost to ensure site is responsive..."
 try {
-    Invoke-WebRequest http://localhost -UseBasicParsing | Out-Null
+    $response = Invoke-WebRequest http://localhost -UseBasicParsing -MaximumRedirection 3
     Write-Host "Localhost request successful."
 } catch {
-    Write-Host "Localhost request failed. Exception: $_"
+    Write-Host "Localhost request failed. Exception: $_.Exception.Message"
 }
+
 
 # Stream IIS logs to stdout
 $logPath = "c:\inetpub\logs\logfiles\W3SVC\u_extend1.log"
