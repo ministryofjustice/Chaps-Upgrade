@@ -4,12 +4,11 @@ WORKDIR /app
 
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/Chaps. ./CHAPS
-COPY CHAPS/Chaps.sln ./CHAPS
 COPY *.ps1 ./
 
 WORKDIR /app/CHAPS
 RUN dir /app/CHAPS
-RUN dir app/
+RUN dir /app
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 
