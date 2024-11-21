@@ -3,12 +3,14 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS bu
 WORKDIR /app
 
 # Copy CHAPS solution and restore dependencies
-COPY CHAPS/Chaps. ./CHAPS
+COPY CHAPS/ ./CHAPS
 COPY *.ps1 ./
 
-WORKDIR /app/CHAPS
 RUN dir /app/CHAPS
-RUN dir /app
+
+WORKDIR /app/CHAPS
+
+RUN dir
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 
