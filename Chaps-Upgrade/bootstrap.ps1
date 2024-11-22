@@ -20,9 +20,6 @@ Import-Module WebAdministration
 Get-Website | ForEach-Object { Write-Host "Site: $_" }
 Get-WebBinding | ForEach-Object { Write-Host "Binding: $_" }
 
-# Log contents of deployment directory
-Write-Host "Listing contents of deployment directory..."
-Get-ChildItem -Path "C:\inetpub\wwwroot" -Recurse | ForEach-Object { Write-Host "File: $_" }
 
 # echo the IIS log to the console:
 Write-Host "Starting W3SVC service..."
