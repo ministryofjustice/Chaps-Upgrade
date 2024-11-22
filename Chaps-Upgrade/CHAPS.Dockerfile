@@ -12,24 +12,15 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 
 WORKDIR /app/CHAPS/Chaps
 
-#RUN msbuild ../Chaps.sln -verbosity:n /m \
-#    /t:Clean \
-#    /p:Configuration=Release
-
 RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
-    /p:DeleteExistingFiles=True \
+    /p:DeleteExistingFiles=True
 
-    
-##RUN dir C:\app\CHAPS\Chaps\bin
-#RUN dir C:\app\CHAPS\Chaps\obj
-#RUN type C:\app\CHAPS\Chaps\bin\PublishedOutput\web.config
-#RUN dir /app/CHAPS/Chaps/bin
-#RUN dir /app/CHAPS/Chaps/bin/Release
+RUN type C:\app\CHAPS\Chaps\bin\PublishedOutput\web.config
 
 # Stage 3: Combine & Run
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
