@@ -36,15 +36,20 @@ try {
 
 
 # Stream IIS logs to stdout
-$logPath = "c:\inetpub\logs\logfiles\W3SVC\u_extend1.log"
-Write-Host "Checking for log file: $logPath"
+$logPath = "c:\inetpub\logs\logfiles\W3SVC1"
+Write-Host "Checking for log file in $logPath"
 if (Test-Path -Path $logPath) {
-    Write-Host "Log file found. Streaming log file to stdout."
-    Get-Content -Path $logPath -Tail 1 -Wait
+    $latestLog = Get-ChildItem -Path $logDir -Filter "u_ex*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($latestLog){
+        Write-Host "Log file found: $($latestLog.Name). Streaming log file to stdout."
+        Get-Content -Path $latestLog.FullName -Tail 1 -Wait
+    } else {
+    Write-Host "No Log files found in: $logPath. Skipping log streaming."
+    } 
 } else {
-    Write-Host "Log file not found: $logPath. Skipping log streaming."    
+    Write-Host "Log directory not found: $logPath. Skipping log streaming."
 }
-    
+
 # Keep the container alive
 Write-Host "Keeping container alive for diagnostics..."
 Start-Sleep -Seconds 3600
