@@ -8,7 +8,7 @@ COPY *.ps1 ./
 
 WORKDIR /app/CHAPS
 
-RUN nuget restore -Verbosity: quiet Chaps.sln
+RUN nuget restore -Verbosity quiet Chaps.sln
 
 RUN msbuild Chaps.sln -verbosity:diag /m \
     /p:Configuration=Release \
