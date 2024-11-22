@@ -21,7 +21,7 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:publishUrl=bin\Release\
     /p:WebPublishMethod=FileSystem \
     /p:DeleteExistingFiles=True \
-    /p:PlatformTarget=AnyCPU
+    /p:PlatformTarget=AnyCPU \
     /t:WebPublish
 
 RUN dir /app/CHAPS/Chaps/bin
