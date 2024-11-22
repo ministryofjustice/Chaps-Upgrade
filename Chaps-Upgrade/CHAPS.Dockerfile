@@ -26,6 +26,9 @@ WORKDIR /app
 
 RUN mkdir -p C:\inetpub\logs\logfiles\W3SVC1
 
+RUN powershell -Command \
+    Install-WindowsFeature Web-AppInit,Web-Asp-Net48
+
 # configure IIS to write a global log file:
 RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'enabled' -value True; \
