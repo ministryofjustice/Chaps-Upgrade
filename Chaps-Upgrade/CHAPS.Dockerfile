@@ -6,20 +6,20 @@ WORKDIR /app
 COPY CHAPS/ ./CHAPS
 COPY *.ps1 ./
 
-WORKDIR /app/CHAPS
+WORKDIR /app/CHAPS/Chaps
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 
 RUN msbuild Chaps.sln -verbosity:diag /m \
     /p:Configuration=Release \
-    /p:OutputPath=bin\Release \
+    /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
     /p:WebPublishMethod=FileSystem \
-    /p:publishUrl=bin\PublishedOutput\
+    /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
     /p:DeleteExistingFiles=True 
     
-RUN dir /bin
-RUN dir /bin/Release
+RUN dir C:\app\CHAPS\Chaps\bin
+RUN dir C:\app\CHAPS\Chaps\bin\Release
 #RUN dir /app/CHAPS/Chaps/bin
 #RUN dir /app/CHAPS/Chaps/bin/Release
 
