@@ -6,11 +6,7 @@ WORKDIR /app
 COPY CHAPS/ ./CHAPS
 COPY *.ps1 ./
 
-RUN dir 
-
 WORKDIR /app/CHAPS
-
-RUN dir
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 
@@ -21,7 +17,7 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:publishUrl=bin\Release\
     /p:DeleteExistingFiles=True \
     /p:PlatformTarget=AnyCPU \
-    /t:Build
+    /t:TransformWebConfig
 
 RUN dir /app/CHAPS/Chaps/bin
 RUN dir /app/CHAPS/Chaps/bin/Release
