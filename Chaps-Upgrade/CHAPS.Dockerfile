@@ -13,13 +13,14 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 RUN msbuild Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:DeployOnBuild=True \
+    /p:PlatformTarget=AnyCPU \
     /p:OutputPath=bin\Release \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=bin\Release\
     /p:DeleteExistingFiles=True \
-    /p:PlatformTarget=AnyCPU \
     /t:WebPublish
 
+RUN dir bin/Release
 #RUN dir /app/CHAPS/Chaps/bin
 #RUN dir /app/CHAPS/Chaps/bin/Release
 
