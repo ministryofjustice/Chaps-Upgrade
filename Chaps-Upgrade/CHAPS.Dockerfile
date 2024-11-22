@@ -12,9 +12,9 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 
 WORKDIR /app/CHAPS/Chaps
 
-RUN msbuild ../Chaps.sln -verbosity:n /m \
-    /t:Clean \
-    /p:Configuration=Release
+#RUN msbuild ../Chaps.sln -verbosity:n /m \
+#    /t:Clean \
+#    /p:Configuration=Release
 
 RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
@@ -23,10 +23,11 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
     /p:DeleteExistingFiles=True \
-    /t:WebPublish
+
     
-RUN dir C:\app\CHAPS\Chaps\bin
-RUN dir C:\app\CHAPS\Chaps\bin\Release
+##RUN dir C:\app\CHAPS\Chaps\bin
+#RUN dir C:\app\CHAPS\Chaps\obj
+#RUN type C:\app\CHAPS\Chaps\bin\PublishedOutput\web.config
 #RUN dir /app/CHAPS/Chaps/bin
 #RUN dir /app/CHAPS/Chaps/bin/Release
 
@@ -45,7 +46,7 @@ RUN powershell -Command \
 # Copy from build-chaps
 WORKDIR /inetpub/wwwroot
 COPY --from=build-chaps /app/CHAPS/Chaps/bin/Release ./Release
-COPY --from=build-chaps /app/CHAPS/Chaps/Web.Release.config ./Web.config
+#COPY --from=build-chaps /app/CHAPS/Chaps/Web.Release.config ./Web.config
 
 # Enable logging
 WORKDIR /
