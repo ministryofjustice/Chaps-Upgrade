@@ -12,7 +12,11 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 
 WORKDIR /app/CHAPS/Chaps
 
-RUN msbuild ../Chaps.sln -verbosity:diag /m \
+RUN msbuild ../Chaps.sln -verbosity:n /m \
+    /t:Clean \
+    /p:Configuration=Release
+
+RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
