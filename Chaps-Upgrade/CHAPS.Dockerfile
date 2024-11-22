@@ -27,7 +27,7 @@ WORKDIR /app
 RUN mkdir -p C:\inetpub\logs\logfiles\W3SVC1
 
 RUN powershell -Command \
-    Install-WindowsFeature Web-AppInit,Web-Asp-Net48
+    Install-WindowsFeature Web-AppInit,Web-Asp-Net45
 
 # configure IIS to write a global log file:
 RUN powershell -Command \
