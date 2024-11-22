@@ -20,8 +20,6 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
     /p:DeleteExistingFiles=True
 
-RUN type C:\app\CHAPS\Chaps\bin\PublishedOutput\web.config
-
 # Stage 3: Combine & Run
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
@@ -37,7 +35,6 @@ RUN powershell -Command \
 # Copy from build-chaps
 WORKDIR /inetpub/wwwroot
 COPY --from=build-chaps /app/CHAPS/Chaps/bin/Release ./Release
-#COPY --from=build-chaps /app/CHAPS/Chaps/Web.Release.config ./Web.config
 
 # Enable logging
 WORKDIR /
