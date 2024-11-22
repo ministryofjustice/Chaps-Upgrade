@@ -6,11 +6,13 @@ WORKDIR /app
 COPY CHAPS/ ./CHAPS
 COPY *.ps1 ./
 
-WORKDIR /app/CHAPS/Chaps
+WORKDIR /app/CHAPS
 
 RUN nuget restore -Verbosity quiet Chaps.sln
 
-RUN msbuild Chaps.sln -verbosity:diag /m \
+WORKDIR /app/CHAPS/Chaps
+
+RUN msbuild ../Chaps.sln -verbosity:diag /m \
     /p:Configuration=Release \
     /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
