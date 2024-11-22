@@ -17,7 +17,7 @@ RUN msbuild Chaps.sln -verbosity:n /m \
     /p:OutputPath=bin\Release \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=bin\Release\
-    /p:DeleteExistingFiles=True \
+    /p:DeleteExistingFiles=True 
     
 
 RUN dir bin/Release
