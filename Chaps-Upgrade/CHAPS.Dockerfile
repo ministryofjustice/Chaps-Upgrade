@@ -18,7 +18,8 @@ RUN msbuild ../Chaps.sln -verbosity:diag /m \
     /p:PlatformTarget=AnyCPU \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
-    /p:DeleteExistingFiles=True 
+    /p:DeleteExistingFiles=True \
+    /t:WebPublish
     
 RUN dir C:\app\CHAPS\Chaps\bin
 RUN dir C:\app\CHAPS\Chaps\bin\Release
