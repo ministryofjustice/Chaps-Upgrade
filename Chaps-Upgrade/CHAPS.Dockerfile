@@ -8,9 +8,9 @@ COPY *.ps1 ./
 
 WORKDIR /app/CHAPS
 
-RUN nuget restore -Verbosity:diag Chaps.sln
+RUN nuget restore -Verbosity: quiet Chaps.sln
 
-RUN msbuild Chaps.sln -verbosity:n /m \
+RUN msbuild Chaps.sln -verbosity:diag /m \
     /p:Configuration=Release \
     /p:OutputPath=bin\Release \
     /p:PlatformTarget=AnyCPU \
