@@ -16,7 +16,6 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 
 RUN msbuild Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
-    /p:DeployOnBuild=True \
     /p:DeployDefaultTarget=WebPublish \
     /p:publishUrl=bin\Release\
     /p:WebPublishMethod=FileSystem \
