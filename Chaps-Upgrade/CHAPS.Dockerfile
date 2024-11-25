@@ -28,6 +28,7 @@ WORKDIR /app
 RUN mkdir -p C:\inetpub\logs\logfiles\W3SVC1
 
 RUN powershell -Command \
+    Install-WindowsFeature Web-Server -IncludeAllSubFeature; \
     Install-WindowsFeature Web-AppInit,Web-Asp-Net45
 
 # configure IIS to write a global log file:
@@ -36,9 +37,6 @@ RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'enabled' -value True; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\inetpub\logs\logfiles'
-
-RUN powershell -Command \
-Install-WindowsFeature Web-AppInit,Web-Asp-Net45,Web-Server -IncludeAllSubFeature
 
 # Copy from build-chaps
 WORKDIR /inetpub/wwwroot
