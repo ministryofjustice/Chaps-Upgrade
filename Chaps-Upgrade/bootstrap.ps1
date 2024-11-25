@@ -21,7 +21,7 @@ Get-Website | ForEach-Object {
     Write-Host "Site Name: $($_.Name), Physical Path: $($_.PhysicalPath), State: $($_.State)" 
     }
 Get-WebBinding | ForEach-Object { 
-    Write-Host "Protocol: $($_.protocol), Binding Info: $($_.bindingInformation), SSL Flags: $(£_.sslFlags)"
+    Write-Host "Protocol: $($_.protocol), Binding Info: $($_.bindingInformation), SSL Flags: $($_.sslFlags)"
  }
 
 
