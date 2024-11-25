@@ -40,7 +40,7 @@ try {
 
 
 # Stream IIS logs to stdout
-$logPath = "c:\inetpub\logs\logfiles\W3SVC1"
+$logPath = "c:\inetpub\logs\logfiles\W3SVC"
 Write-Host "Checking for log file in $logPath"
 if (Test-Path -Path $logPath) {
     $latestLog = Get-ChildItem -Path $logDir -Filter "u_ex*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
