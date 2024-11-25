@@ -43,7 +43,7 @@ try {
 $logPath = "c:\inetpub\logs\logfiles\W3SVC"
 Write-Host "Checking for log file in $logPath"
 if (Test-Path -Path $logPath) {
-    $latestLog = Get-ChildItem -Path $logDir -Filter "u_ex*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    $latestLog = Get-ChildItem -Path $logPath -Filter "u_ex*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if ($latestLog){
         Write-Host "Log file found: $($latestLog.Name). Streaming log file to stdout."
         Get-Content -Path $latestLog.FullName -Tail 1 -Wait
