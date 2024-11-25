@@ -38,7 +38,7 @@ RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\inetpub\logs\logfiles'
 
 RUN powershell -Command \
-Install-WindowsFeature Web-AppInit,Web-Asp-Net45
+Install-WindowsFeature Web-AppInit,Web-Asp-Net45,Web-Server -IncludeAllSubFeature
 
 # Copy from build-chaps
 WORKDIR /inetpub/wwwroot
