@@ -44,7 +44,7 @@ Install-WindowsFeature Web-AppInit,Web-Asp-Net45
 WORKDIR /inetpub/wwwroot
 COPY --from=build-chaps /app/CHAPS/Chaps/bin/Release ./Release
 #COPY --from=build-chaps /app/CHAPS/Chaps/Web.Release.config ./Web.config
-COPY /app/CHAPS/Chaps/obj/Release/TransformWebConfig/transformed/Web.config ./Web.config
+COPY --from=build-chaps /app/CHAPS/Chaps/obj/Release/TransformWebConfig/transformed/Web.config ./Web.config
 
 # Enable logging
 WORKDIR /
