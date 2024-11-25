@@ -16,6 +16,7 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
     /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
+    /p:DeployOnBuild=True \
     /p:WebPublishMethod=FileSystem \
     /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
     /p:DeleteExistingFiles=True
