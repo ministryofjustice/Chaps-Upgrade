@@ -25,6 +25,7 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 WORKDIR /app
 
+RUN mkdir /chapslogs
 RUN mkdir -p C:\inetpub\logs\logfiles\W3SVC1
 
 #RUN powershell -Command \
