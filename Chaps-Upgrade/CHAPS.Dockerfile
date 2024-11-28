@@ -4,6 +4,7 @@ WORKDIR /src
 
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/ ./CHAPS
+COPY bootstrap.ps1 ./
 
 WORKDIR /src/CHAPS
 
@@ -19,7 +20,6 @@ FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS
 WORKDIR /inetpub/wwwroot
 
 RUN mkdir -p C:\chapslogs
-#RUN mkdir -p C:\inetpub\logs\logfiles\W3SVC1
 
 # configure IIS to write a global log file:
 RUN powershell -Command \
@@ -30,7 +30,7 @@ RUN powershell -Command \
 
 COPY --from=build-chaps /publish/ .
 
-# Enable logging
+#Use bootstrap to enable logging
 WORKDIR /
-COPY --from=build-chaps /src/bootstrap.ps1 ./
+COPY bootstrap.ps1 ./
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
