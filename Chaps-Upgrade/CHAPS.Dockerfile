@@ -18,9 +18,6 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:publishUrl=C:\out \
     /p:DeleteExistingFiles=True
 
-# Debug
-RUN dir C:\
-
 # Stage 3:Create CHAPS runtime container with IIS
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
 #WORKDIR /app
