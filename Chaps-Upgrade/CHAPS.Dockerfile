@@ -10,12 +10,12 @@ WORKDIR /src/CHAPS
 RUN nuget restore -Verbosity quiet Chaps.sln
 
 WORKDIR /src/CHAPS/Chaps
-RUN msbuild ../Chaps.sln -verbosity:n /m \
-    /p:Configuration=Release \
-    /p:PlatformTarget=AnyCPU \
-    /p:DeployOnBuild=True \
-    /p:WebPublishMethod=FileSystem \
-    /p:publishUrl=C:\out \
+RUN msbuild ../Chaps.sln -verbosity:n /m ^
+    /p:Configuration=Release ^
+    /p:PlatformTarget=AnyCPU ^
+    /p:DeployOnBuild=True ^
+    /p:WebPublishMethod=FileSystem ^
+    /p:publishUrl=C:\publish ^
     /p:DeleteExistingFiles=True
 
 # Stage 3:Create CHAPS runtime container with IIS
@@ -40,7 +40,7 @@ RUN powershell -Command \
 #COPY --from=build-chaps /app/CHAPS/Chaps/Views ./Views
 #COPY --from=build-chaps /app/CHAPS/Chaps/Content ./Content
 #COPY --from=build-chaps /app/CHAPS/Chaps/Scripts ./Scripts
-COPY --from=build-chaps /out/ .
+COPY --from=build-chaps /publish/ .
 
 # Enable logging
 WORKDIR /
