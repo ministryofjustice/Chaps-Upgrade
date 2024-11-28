@@ -11,8 +11,8 @@ WORKDIR /src/CHAPS
 RUN nuget restore -Verbosity quiet Chaps.sln
 
 WORKDIR /src/CHAPS/Chaps
-RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:WebPublishMethod=FileSystem /p:OutputPath=C:\publish /p:DeleteExistingFiles=True
-RUN dir C:\publish
+RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True
+RUN dir C:\bin
 
 # Stage 3:Create CHAPS runtime container with IIS
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
@@ -28,7 +28,7 @@ RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\inetpub\logs\logfiles'
 
-COPY --from=build-chaps /publish/ .
+COPY --from=build-chaps /bin/* /inetpub/wwwroot
 
 #Use bootstrap to enable logging
 WORKDIR /
