@@ -28,7 +28,7 @@ RUN powershell -Command \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\inetpub\logs\logfiles'
 
-COPY --from=build-chaps /bin/* /inetpub/wwwroot
+COPY --from=build-chaps /bin /inetpub/wwwroot
 
 #Use bootstrap to enable logging
 WORKDIR /
