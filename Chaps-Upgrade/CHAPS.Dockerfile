@@ -12,12 +12,10 @@ RUN nuget restore -Verbosity quiet Chaps.sln
 WORKDIR /src/CHAPS/Chaps
 RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:Configuration=Release \
-#   /p:OutputPath=C:\app\CHAPS\Chaps\bin\Release \
     /p:PlatformTarget=AnyCPU \
     /p:DeployOnBuild=True \
     /p:WebPublishMethod=FileSystem \
-#   /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
-    /p:publishUrl=C:\publish \
+    /p:publishUrl=C:\out \
     /p:DeleteExistingFiles=True
 
 # Debug
@@ -45,7 +43,7 @@ RUN powershell -Command \
 #COPY --from=build-chaps /app/CHAPS/Chaps/Views ./Views
 #COPY --from=build-chaps /app/CHAPS/Chaps/Content ./Content
 #COPY --from=build-chaps /app/CHAPS/Chaps/Scripts ./Scripts
-COPY --from=build-chaps /publish/ .
+COPY --from=build-chaps /out/ .
 
 # Enable logging
 WORKDIR /
