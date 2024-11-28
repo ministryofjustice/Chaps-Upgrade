@@ -17,7 +17,7 @@ RUN msbuild ../Chaps.sln -verbosity:n /m \
     /p:DeployOnBuild=True \
     /p:WebPublishMethod=FileSystem \
 #   /p:publishUrl=C:\app\CHAPS\Chaps\bin\PublishedOutput\
-    /p:publishUrl=C:\out \
+    /p:publishUrl=C:\publish \
     /p:DeleteExistingFiles=True
 
 # Stage 3: Combine & Run
@@ -42,7 +42,7 @@ RUN powershell -Command \
 #COPY --from=build-chaps /app/CHAPS/Chaps/Views ./Views
 #COPY --from=build-chaps /app/CHAPS/Chaps/Content ./Content
 #COPY --from=build-chaps /app/CHAPS/Chaps/Scripts ./Scripts
-COPY --from=build-chaps /out/ .
+COPY --from=build-chaps /publish/ .
 
 # Enable logging
 WORKDIR /
