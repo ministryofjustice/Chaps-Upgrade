@@ -26,6 +26,7 @@ RUN dir /update-config.ps1
 
 #update applicationHost.config
 RUN powershell -ExecutionPolicy Bypass -File /update-config.ps1
+RUN powershell -Command iisreset
 
 # configure IIS to write a global log file:
 RUN powershell -Command \
