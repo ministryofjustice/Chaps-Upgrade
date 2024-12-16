@@ -1,13 +1,16 @@
-Import-Module WebAdministration
+$path = "C:\Windows\System32\inetsrv\config\applicationHost.config"
+[xml]$config = Get-Content -Path $path
 
-# Unlock the anonymous authentication section
-Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' `
-    -filter 'system.webServer/security/authentication/anonymousAuthentication' `
-    -name 'overrideModeDefault' -value 'Allow'
+# Find the authentication sections and unlock them
+$config.configuration.'system.webServer'.sectionGroup.section | Where-Object { $_.name -eq 'anonymousAuthentication' } | ForEach-Object {
+    $_.overrideModeDefault = "Allow"
+}
 
-# Unlock the windows authentication section
-Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' `
-    -filter 'system.webServer/security/authentication/windowsAuthentication' `
-    -name 'overrideModeDefault' -value 'Allow'
+$config.configuration.'system.webServer'.sectionGroup.section | Where-Object { $_.name -eq 'windowsAuthentication' } | ForEach-Object {
+    $_.overrideModeDefault = "Allow"
+}
 
-Write-Host "Authentication sections unlocked successfully."
+# Save changes to applicationHost.config
+$config.Save($path)
+
+Write-Host "Authentication sections successfully unlocked in applicationHost.config."
