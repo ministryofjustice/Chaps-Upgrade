@@ -21,6 +21,9 @@ WORKDIR /inetpub/wwwroot
 
 RUN mkdir -p C:\chapslogs
 
+COPY update-config.ps1 /update-config.ps1
+RUN dir /update-config.ps1
+
 #update applicationHost.config
 RUN powershell -ExecutionPolicy Bypass -File /update-config.ps1
 
