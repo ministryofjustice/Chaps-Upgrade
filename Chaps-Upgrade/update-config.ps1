@@ -1,16 +1,8 @@
-$path = "C:\Windows\System32\inetsrv\config\applicationHost.config"
-[xml]$config = Get-Content -Path $path
+# Unlock anonymousAuthentication
+C:\Windows\System32\inetsrv\appcmd.exe unlock config /section:system.webServer/security/authentication/anonymousAuthentication
 
-# Find the authentication sections and unlock them
-$config.configuration.'system.webServer'.sectionGroup.section | Where-Object { $_.name -eq 'anonymousAuthentication' } | ForEach-Object {
-    $_.overrideModeDefault = "Allow"
-}
+# Unlock windowsAuthentication
+C:\Windows\System32\inetsrv\appcmd.exe unlock config /section:system.webServer/security/authentication/windowsAuthentication
 
-$config.configuration.'system.webServer'.sectionGroup.section | Where-Object { $_.name -eq 'windowsAuthentication' } | ForEach-Object {
-    $_.overrideModeDefault = "Allow"
-}
+Write-Host "Sections successfully unlocked using appcmd."
 
-# Save changes to applicationHost.config
-$config.Save($path)
-
-Write-Host "Authentication sections successfully unlocked in applicationHost.config."
