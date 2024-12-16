@@ -5,6 +5,7 @@ WORKDIR /src
 # Copy CHAPS solution and restore dependencies
 COPY CHAPS/ ./CHAPS
 COPY bootstrap.ps1 ./
+COPY update-config.ps1 /update-config.ps1
 
 WORKDIR /src/CHAPS
 
@@ -16,23 +17,14 @@ RUN dir C:\bin
 
 # Stage 3:Create CHAPS runtime container with IIS
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
-#WORKDIR /app
 WORKDIR /inetpub/wwwroot
 
 RUN mkdir -p C:\chapslogs
 
-# configure IIS to write a global log file:
-RUN powershell -Command \
-    $path = "C:\Windows\System32\inetsrv\config\applicationHost.config"; \
-    [xml]$config = Get-Content -Path $path; \
-    $anonymousAuth = $config.configuration.'system.webServer'.sectionGroup.section \
-        | Where-Object { $_.name -eq 'anonymousAuthentication' }; \
-    $windowsAuth = $config.configuration.'system.webServer'.sectionGroup.section \
-        | Where-Object { $_.name -eq 'windowsAuthentication' }; \
-    $anonymousAuth.overrideModeDefault = "Allow"; \
-    $windowsAuth.overrideModeDefault = "Allow"; \
-    $config.Save($path)
+#update applicationHost.config
+RUN powershell -ExecutionPolicy Bypass -File /update-config.ps1
 
+# configure IIS to write a global log file:
 RUN powershell -Command \
 	Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log' -name 'centralLogFileMode' -value 'CentralW3C'; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'enabled' -value True; \
