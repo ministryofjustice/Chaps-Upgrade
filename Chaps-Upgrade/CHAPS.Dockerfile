@@ -24,9 +24,9 @@ RUN mkdir -p C:\chapslogs
 # configure IIS to write a global log file:
 RUN powershell -Command \
     Import-Module WebAdministration; \
-    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.webServer/security/authentication/anonymousAuthentication' -name 'overrideModeDefault' -value 'Allow'; \
-    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.webServer/security/authentication/windowsAuthentication' -name 'overrideModeDefault' -value 'Allow' \
-	Set-WebConfigurationProperty -p 'MACHINE/WEBROOT/APPHOST' -fi 'system.applicationHost/log' -n 'centralLogFileMode' -v 'CentralW3C'; \
+    Set-WebConfiguration -filter 'system.webServer/security/authentication/anonymousAuthentication' -MetaData 'overrideModeDefault' -value 'Allow'; \
+    Set-WebConfiguration -filter 'system.webServer/security/authentication/windowsAuthentication' -MetaData 'overrideModeDefault' -value 'Allow'; \
+	Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log' -name 'centralLogFileMode' -value 'CentralW3C'; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'enabled' -value True; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; \
     Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\inetpub\logs\logfiles'
