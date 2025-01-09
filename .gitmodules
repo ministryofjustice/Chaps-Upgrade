@@ -6,5 +6,5 @@
 [submodule "Chaps-Upgrade/ChapsDotNet"]
     path = Chaps-Upgrade/ChapsDotNet
     url = https://github.com/ministryofjustice/ChapsDotNet.git
-	branch = demo
+    branch = demo
 	
