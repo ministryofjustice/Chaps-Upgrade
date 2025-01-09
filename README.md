@@ -15,9 +15,11 @@ git clone --recurse-submodules https://github.com/ministryofjustice/Chaps-Upgrad
 
 check submodule status:
 git submodule status 
-- you should see hashes and paths, which means the submodules are initialised.
-  if not, run 
+
+- you should see hashes and paths, which means the submodules are initialised. If not, run
+  
 git submodule update --init --recursive
+
 and check the status again. 
 
 
