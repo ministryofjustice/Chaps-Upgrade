@@ -13,8 +13,12 @@ Beginning with the /Admin route, ChapsDotNet will return views for any controlle
 Clone the repo: 
 git clone --recurse-submodules https://github.com/ministryofjustice/Chaps-Upgrade.git
 
-Initialise and update submodules: 
-git submodule update —init —recursive
+check submodule status:
+git submodule status 
+- you should see hashes and paths, which means the submodules are initialised.
+  if not, run 
+git submodule update --init --recursive
+and check the status again. 
 
 
 # Making changes to one of the projects 
