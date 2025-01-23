@@ -167,7 +167,7 @@ jobs:
           aws ecs describe-task-definition --task-definition $active_task_definition --query "taskDefinition.containerDefinitions[*].[name, image]" --output json
 
       - name: Deploy Chaps YARP Combined Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: updated-chaps-yarp-task-definition.json
           service: chaps-yarp-combined-service
