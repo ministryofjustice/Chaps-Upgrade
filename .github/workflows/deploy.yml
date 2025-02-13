@@ -233,4 +233,63 @@ jobs:
           cluster: cdpt-chaps-ecs-cluster
           wait-for-service-stability: true
           force-new-deployment: true
+
+          
+  deploy-production:
+    needs: [deploy-staging]
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::653875321404:role/modernisation-platform-oidc-cicd
+
+      - name: Fetch Current ECS Task Definition
+        run: |
+          aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
+          echo "Fetched current task definition:"
+          cat chaps-yarp-task-definition.json
+
+      - name: Update ECS Task Definition for chaps YARP combined
+        id: update-chaps-yarp-task-definition
+        env:
+          AWS_REGION: eu-west-2
+          ECR_REPOSITORY: "chaps-ecr-repo"
+        run: |
+          aws ecs describe-task-definition --task-definition chaps-yarp-family --query taskDefinition > chaps-yarp-task-definition.json
+          echo "Current task definition retrieved from ECS: "
+          cat chaps-yarp-task-definition.json
+              
+          jq '(.containerDefinitions[] | select(.name == "chapsdotnet-container").image) = "${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}" |
+              (.containerDefinitions[] | select(.name == "chaps-container").image) = "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"' \
+              chaps-yarp-task-definition.json > updated-chaps-yarp-task-definition.json
+            
+      - name: Verify Active Task Definition
+        run: |
+          echo "Fetching active task definition ARN for service:"
+          active_task_definition=$(aws ecs describe-services --cluster cdpt-chaps-ecs-cluster --services chaps-yarp-combined-service --query "services[0].taskDefinition" --output text)
+          echo "Active Task Definition ARN: $active_task_definition"
+
+      
+      - name: Inspect Active Task Definition
+        run: |
+          echo "Inspecting container definitions for active task definition:"
+          active_task_definition=$(aws ecs describe-services --cluster cdpt-chaps-ecs-cluster --services chaps-yarp-combined-service --query "services[0].taskDefinition" --output text)
+          aws ecs describe-task-definition --task-definition $active_task_definition --query "taskDefinition.containerDefinitions[*].[name, image]" --output json
+
+      - name: Deploy Chaps YARP Combined Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: updated-chaps-yarp-task-definition.json
+          service: chaps-yarp-combined-service
+          cluster: cdpt-chaps-ecs-cluster
+          wait-for-service-stability: true
+          force-new-deployment: true             
+
           
