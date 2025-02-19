@@ -16,10 +16,10 @@ ENV NUGET_PACKAGES=C:\src\CHAPS\packages
 
 RUN dir C:\src\CHAPS\packages
 RUN dir C:\src\CHAPS\packages\Microsoft.Owin*
-
+RUN type C:\src\CHAPS\Chaps\packages.config
 
 WORKDIR /src/CHAPS/Chaps
-RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:RestorePackages=true
+RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:RestorePackages=true /p:NuGetPackageRoot=C:\src\CHAPS\packages
 
 RUN dir C:\bin
 RUN dir C:\src\CHAPS\packages
