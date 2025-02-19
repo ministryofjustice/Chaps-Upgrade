@@ -14,6 +14,10 @@ RUN nuget restore Chaps.sln -PackagesDirectory C:\src\CHAPS\packages
 
 ENV NUGET_PACKAGES=C:\src\CHAPS\packages
 
+RUN dir C:\src\CHAPS\packages
+RUN dir C:\src\CHAPS\packages\Microsoft.Owin*
+
+
 WORKDIR /src/CHAPS/Chaps
 RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:RestorePackages=true
 
