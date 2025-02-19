@@ -9,11 +9,13 @@ COPY update-config.ps1 /update-config.ps1
 
 WORKDIR /src/CHAPS
 
-RUN nuget restore -Verbosity quiet Chaps.sln
+RUN nuget locals all --clear
+RUN nuget restore -Verbosity detailed Chaps.sln
 
 WORKDIR /src/CHAPS/Chaps
 RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True
 RUN dir C:\bin
+RUN dir C:\src\CHAPS\packages
 
 # Stage 3:Create CHAPS runtime container with IIS
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
