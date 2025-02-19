@@ -10,10 +10,13 @@ COPY update-config.ps1 /update-config.ps1
 WORKDIR /src/CHAPS
 
 RUN nuget locals all -clear
-RUN nuget restore Chaps.sln -PackagesDirectory packages
+RUN nuget restore Chaps.sln -PackagesDirectory packages C:\src\CHAPS\packages
+
+ENV NUGET_PACKAGES=C:\src\CHAPS\packages
 
 WORKDIR /src/CHAPS/Chaps
-RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True
+RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:RestorePackages=true
+
 RUN dir C:\bin
 RUN dir C:\src\CHAPS\packages
 
