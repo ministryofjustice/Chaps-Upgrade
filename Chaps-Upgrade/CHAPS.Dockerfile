@@ -21,7 +21,7 @@ RUN dir C:\src\CHAPS\packages\Microsoft.Owin.4.2.2\lib\net45
 RUN type C:\src\CHAPS\Chaps\packages.config
 
 WORKDIR /src/CHAPS/Chaps
-RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:RestorePackages=true /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:NuGetPackageRoot=C:\src\CHAPS\packages /p:RestoreAdditionalProjectSources="C:\src\CHAPS\packages"
+RUN msbuild ../Chaps.sln -verbosity:detailed /m /t:Clean,Build /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:RestorePackages=true /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True /p:NuGetPackageRoot=C:\src\CHAPS\packages /p:RestoreAdditionalProjectSources="C:\src\CHAPS\packages"
 
 RUN dir C:\bin
 RUN dir C:\src\CHAPS\packages
