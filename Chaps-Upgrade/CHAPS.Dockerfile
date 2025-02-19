@@ -10,7 +10,7 @@ COPY update-config.ps1 /update-config.ps1
 WORKDIR /src/CHAPS
 
 RUN nuget locals all -clear
-RUN nuget restore -Verbosity detailed Chaps.sln
+RUN nuget restore Chaps.sln -PackagesDirectory packages
 
 WORKDIR /src/CHAPS/Chaps
 RUN msbuild ../Chaps.sln -verbosity:detailed /m /p:Configuration=Release /p:PlatformTarget=AnyCPU /p:DeployOnBuild=True /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl=C:\bin /p:DeleteExistingFiles=True
