@@ -10,7 +10,7 @@ COPY update-config.ps1 /update-config.ps1
 WORKDIR /src/CHAPS
 
 RUN nuget locals all -clear
-RUN nuget restore Chaps.sln -PackagesDirectory packages C:\src\CHAPS\packages
+RUN nuget restore Chaps.sln -PackagesDirectory C:\src\CHAPS\packages
 
 ENV NUGET_PACKAGES=C:\src\CHAPS\packages
 
