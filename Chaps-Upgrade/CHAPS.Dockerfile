@@ -9,7 +9,7 @@ COPY update-config.ps1 /update-config.ps1
 
 WORKDIR /src/CHAPS
 
-RUN nuget locals all --clear
+RUN nuget locals all -clear
 RUN nuget restore -Verbosity detailed Chaps.sln
 
 WORKDIR /src/CHAPS/Chaps
