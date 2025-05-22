@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
 WORKDIR /src
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
-RUN Invoke-WebRequest -Uri https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi -OutFile node.msi ; \
+RUN Invoke-WebRequest -Uri https://nodejs.org/dist/v22.16.0/node-v22.16.0-x64.msi -OutFile node.msi ; \
     Start-Process msiexec.exe -Wait -ArgumentList '/i', 'node.msi', '/quiet', '/norestart' ; \
     Remove-Item node.msi
 
