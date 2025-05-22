@@ -2,6 +2,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
 WORKDIR /src
 
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+RUN Invoke-WebRequest -Uri https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi -OutFile node.msi ; \
+    Start-Process msiexec.exe -Wait -ArgumentList '/i', 'node.msi', '/quiet', '/norestart' ; \
+    Remove-Item node.msi
+
+SHELL ["cmd", "/S", "/C"]
+
 # Copy and restore ChapsDotNet dependencies
 COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
 COPY ChapsDotNet/ChapsDotNET.Data/ChapsDotNET.Data.csproj ChapsDotNet/ChapsDotNET.Data/
