@@ -1,5 +1,5 @@
 # Stage 1: Build CHAPS (.NET Framework 4.8)
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS build-chaps
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build
 WORKDIR /src
 
 # Copy CHAPS solution and restore dependencies
@@ -27,7 +27,7 @@ RUN dir C:\bin
 RUN dir C:\src\CHAPS\packages
 
 # Stage 3:Create CHAPS runtime container with IIS
-FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019 AS runtime
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2022 AS runtime
 WORKDIR /inetpub/wwwroot
 
 RUN mkdir -p C:\chapslogs
@@ -52,3 +52,4 @@ COPY --from=build-chaps /bin /inetpub/wwwroot
 WORKDIR /
 COPY bootstrap.ps1 ./
 ENTRYPOINT ["powershell.exe", "C:\\bootstrap.ps1"]
+

@@ -1,6 +1,13 @@
 # Stage 1: Build ChapsDotNet (.NET 8)
-FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2022 AS build-dotnet
 WORKDIR /src
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+RUN Invoke-WebRequest -Uri https://nodejs.org/dist/v22.16.0/node-v22.16.0-x64.msi -OutFile node.msi ; \
+    Start-Process msiexec.exe -Wait -ArgumentList '/i', 'node.msi', '/quiet', '/norestart' ; \
+    Remove-Item node.msi
+
+SHELL ["cmd", "/S", "/C"]
 
 # Copy and restore ChapsDotNet dependencies
 COPY ChapsDotNet/ChapsDotNET/ChapsDotNET.csproj ChapsDotNet/ChapsDotNET/
@@ -20,7 +27,7 @@ RUN dotnet restore ChapsDotNET.csproj
 RUN dotnet publish ChapsDotNET.csproj -c Release -o /out
 
 # Stage 2: Create ChapsDotNet runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2019 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2022 AS runtime
 WORKDIR /app
 COPY --from=build-dotnet /out ./
 
