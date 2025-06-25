@@ -1,5 +1,5 @@
 # Stage 1: Build CHAPS (.NET Framework 4.8)
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build-chaps
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build
 WORKDIR /src
 
 # Copy CHAPS solution and restore dependencies
@@ -32,11 +32,14 @@ WORKDIR /inetpub/wwwroot
 
 RUN mkdir -p C:\chapslogs
 
+# Copy and check config file
 COPY update-config.ps1 /update-config.ps1
-RUN dir /update-config.ps1
+RUN powershell -Command "Get-Item -Path C:\\update-config.ps1
 
 #update applicationHost.config
 RUN powershell -ExecutionPolicy Bypass -File /update-config.ps1
+
+#Restart iis
 RUN powershell -Command iisreset
 
 # configure IIS to write a global log file:
