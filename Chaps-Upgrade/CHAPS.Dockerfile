@@ -1,5 +1,5 @@
 # Stage 1: Build CHAPS (.NET Framework 4.8)
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build-chaps
 WORKDIR /src
 
 # Copy CHAPS solution and restore dependencies
