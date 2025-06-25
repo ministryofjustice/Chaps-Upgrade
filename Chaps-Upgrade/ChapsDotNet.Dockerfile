@@ -1,5 +1,5 @@
 # Stage 1: Build ChapsDotNet (.NET 8)
-FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2022 AS build-dotnet
 WORKDIR /src
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
@@ -27,7 +27,7 @@ RUN dotnet restore ChapsDotNET.csproj
 RUN dotnet publish ChapsDotNET.csproj -c Release -o /out
 
 # Stage 2: Create ChapsDotNet runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2019 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2022 AS runtime
 WORKDIR /app
 COPY --from=build-dotnet /out ./
 
