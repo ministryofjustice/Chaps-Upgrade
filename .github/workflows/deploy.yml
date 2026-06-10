@@ -90,13 +90,14 @@ jobs:
             );
           "
       - name: Docker diagnostics
-        shell: bash
+        shell: pwsh
         run: |
           Start-Service docker
           docker version
           docker info --format 'OSType={{.OSType}} ServerVersion={{.ServerVersion}}'
       
       - name: Build, tag, and push chaps image to Amazon ECR
+        shell: bash
         env:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
