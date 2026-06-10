@@ -92,6 +92,7 @@ jobs:
       - name: Docker diagnostics
         shell: bash
         run: |
+          Start-Service docker
           docker version
           docker info --format 'OSType={{.OSType}} ServerVersion={{.ServerVersion}}'
       
