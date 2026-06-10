@@ -98,7 +98,7 @@ jobs:
           docker buildx build --no-cache `
             -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} `
             -t ${{ vars.ECR_URL }}:chaps-development `
-            -f ./CHAPS.Dockerfile ./Chaps-Upgrade `
+            -f CHAPS.Dockerfile ./Chaps-Upgrade `
             --push
           echo "Pushed images:"
           echo "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"
@@ -113,7 +113,7 @@ jobs:
           docker buildx build `
             -t ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} `
             -t ${{ vars.ECR_URL }}:chapsdotnet-development `
-            -f ./ChapsDotNet.Dockerfile ./Chaps-Upgrade `
+            -f ChapsDotNet.Dockerfile ./Chaps-Upgrade `
             --push
           echo "Pushed images:"
           echo "${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}"
