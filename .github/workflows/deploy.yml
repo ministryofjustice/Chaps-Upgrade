@@ -94,15 +94,25 @@ jobs:
           ECR_REGISTRY: 374269020027.dkr.ecr.eu-west-2.amazonaws.com
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
         run: |
-          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
+          $ErrorActionPreference = 'Stop'
+
+          $password = aws ecr get-login-password --region eu-west-2
+          if ($LASTEXITCODE -ne 0) { throw "aws ecr get-login-password failed ($LASTEXITCODE)" }
+
+          $password | docker login --username AWS --password-stdin $env:ECR_REGISTRY
+          if ($LASTEXITCODE -ne 0) { throw "docker login failed ($LASTEXITCODE)" }
+
           docker buildx build --no-cache `
+            --progress=plain `
             -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} `
             -t ${{ vars.ECR_URL }}:chaps-development `
-            -f CHAPS.Dockerfile ./Chaps-Upgrade `
+            -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade `
             --push
-          echo "Pushed images:"
-          echo "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"
-          echo "${{ vars.ECR_URL }}:chaps-development"
+          if ($LASTEXITCODE -ne 0) { throw "docker buildx build (chaps) failed ($LASTEXITCODE)" }
+
+          Write-Host "Pushed images:"
+          Write-Host "${{ vars.ECR_URL }}:chaps-${{ github.sha }}"
+          Write-Host "${{ vars.ECR_URL }}:chaps-development"
       
       - name: Build, tag, and push chapsdotnet image to Amazon ECR
         env:
