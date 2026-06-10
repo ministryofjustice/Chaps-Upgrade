@@ -95,7 +95,7 @@ jobs:
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
-          docker buildx --no-cache -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
+          docker buildx build --no-cache -t ${{ vars.ECR_URL }}:chaps-${{ github.sha }} -f ./Chaps-Upgrade/CHAPS.Dockerfile ./Chaps-Upgrade
           docker tag ${{ vars.ECR_URL }}:chaps-${{ github.sha }} ${{ vars.ECR_URL }}:chaps-development
           docker push ${{ vars.ECR_URL }}:chaps-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chaps-development
@@ -109,7 +109,7 @@ jobs:
           ECR_REPOSITORY: "cdpt-chaps-ecr-repo"
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${env:ECR_REGISTRY}
-          docker buildx -t ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
+          docker buildx build -t ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} -f ./Chaps-Upgrade/ChapsDotNet.Dockerfile ./Chaps-Upgrade
           docker tag ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }} ${{ vars.ECR_URL }}:chapsdotnet-development
           docker push ${{ vars.ECR_URL }}:chapsdotnet-${{ github.sha }}
           docker push ${{ vars.ECR_URL }}:chapsdotnet-development
